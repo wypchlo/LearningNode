@@ -11,14 +11,21 @@ const server = http.createServer(async(req, res) => {
     const url = req.url;
 
     res.setHeader('Content-Type', 'text/html');
-    let page = await pageContent('src/index.html');
+    let path = './src/';
 
     switch(url)
     {
-        case '/about':
-            page = await pageContent('src/about.html');
+        case '/':
+            path += 'index.html';
             break;
+        case '/about':
+            path += 'about.html';
+            break;
+        default:
+            path += '404.html';
     }
+
+    const page = await res.pageContent(path);
     res.write(page);
     res.end();
 })
