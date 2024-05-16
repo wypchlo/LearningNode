@@ -1,9 +1,10 @@
-const fs = require('fs').promises;
+const fs = require('fs');
+const fsp = fs.promises;
 
 const writeReadFile = async(filePath, data) => {
     try{
-        await fs.writeFile(filePath, data);
-        const fileContent = await fs.readFile(filePath, 'utf-8');
+        await fsp.writeFile(filePath, data);
+        const fileContent = await fsp.readFile(filePath, 'utf-8');
         return fileContent;
     }
     catch(error){
@@ -11,6 +12,27 @@ const writeReadFile = async(filePath, data) => {
     }
 }
 
-writeReadFile("testFile.txt", "Test file content test")
-    .then(data => console.log(data))
-    .catch(error => console.log(error));
+const mkdirIfNotExists = async(directory) => {
+    if(fs.existsSync(directory)) return;
+
+    try{
+        const dirCreated = await fsp.mkdir(directory);
+    }
+    catch(error){
+        return `Couldn't create the ${directory} directory`;
+    }
+};
+
+const main = async() => {
+    await mkdirIfNotExists('./files');
+
+    try{
+        const fileContent = await writeReadFile('./files/testFile.txt', 'cool file content');
+        console.log(fileContent);
+    }
+    catch(error) {
+        console.log(error);
+    }
+};
+
+main();
