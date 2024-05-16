@@ -25,7 +25,7 @@ const server = http.createServer(async(req, res) => {
             path += '404.html';
     }
 
-    const page = await res.pageContent(path);
+    const page = await pageContent(path);
     res.write(page);
     res.end();
 })
